@@ -3,6 +3,26 @@
 	"displayName": "VS Todo",
 	"description": "Track your remaining task",
 	"version": "0.0.1",
+	"homepage": "https://github.com/souravlayek/VS-Todo-Extension",
+	"publisher": "souravlayek",
+	"license": "GPLv3",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/souravlayek/VS-Todo-Extension"
+	},
+	"bugs": {
+		"url": "https://github.com/souravlayek/VS-Todo-Extension/issues"
+	},
+	"keywords": [
+		"todo",
+		"task manager",
+		"todo manager",
+		"vstodo",
+		"vs-todo"
+	],
+	"author": {
+		"name": "Sourav Layek"
+	},
 	"engines": {
 		"vscode": "^1.53.0"
 	},
