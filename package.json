@@ -1,8 +1,8 @@
 {
-  "name": "vs-todo",
+	"name": "vs-todo",
 	"displayName": "VS Todo",
 	"description": "Track your remaining task",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"homepage": "https://github.com/souravlayek/VS-Todo-Extension",
 	"publisher": "souravlayek",
 	"license": "gpl-3.0",
