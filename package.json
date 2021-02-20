@@ -63,7 +63,14 @@
 				"title": "Add Todo From Selection",
 				"category": "VS Todo"
 			}
-		]
+		],
+		"keybindings": [
+            {
+                "command": "vstodo.addTodo",
+                "key": "ctrl+alt+a",
+                "mac": "shift+cmd+a"
+            }
+        ]
 	},
 	"scripts": {
 		"vscode:prepublish": "yarn run compile",
