@@ -2,7 +2,7 @@
 	"name": "vs-todo",
 	"displayName": "VS Todo",
 	"description": "Track your remaining task",
-	"version": "0.0.3",
+	"version": "1.0.0",
 	"homepage": "https://github.com/souravlayek/VS-Todo-Extension",
 	"publisher": "souravlayek",
 	"license": "gpl-3.0",
@@ -65,12 +65,12 @@
 			}
 		],
 		"keybindings": [
-            {
-                "command": "vstodo.addTodo",
-                "key": "ctrl+alt+a",
-                "mac": "shift+cmd+a"
-            }
-        ]
+			{
+				"command": "vstodo.addTodo",
+				"key": "ctrl+alt+a",
+				"mac": "shift+cmd+a"
+			}
+		]
 	},
 	"scripts": {
 		"vscode:prepublish": "yarn run compile",
