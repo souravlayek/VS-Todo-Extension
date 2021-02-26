@@ -30,7 +30,15 @@ export function activate(context: vscode.ExtensionContext) {
 				}
 				const text = activeTextEditor.document.getText(activeTextEditor.selection);
 				if (text.length  === 0) {
-					vscode.window.showWarningMessage("no text selected");
+					let options: vscode.InputBoxOptions = {
+						prompt: "Enter Task: ",
+						placeHolder:"Type your task"
+					}
+					vscode.window.showInputBox(options).then(res => {
+						if (!res) return;
+						sidebarProvider._view?.webview.postMessage({type: "new-todo", value: res});
+					})
+					// vscode.window.showWarningMessage("no text selected");
 					return;
 				}
 				sidebarProvider._view?.webview.postMessage({type: "new-todo", value: text});
