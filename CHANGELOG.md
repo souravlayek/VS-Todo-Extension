@@ -15,3 +15,7 @@ minor bug fix.
 ## [1.0.0]
 
 Added shortcut key bindings.
+
+### [1.1.0]
+
+Added shortcut to input pop up.

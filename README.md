@@ -5,8 +5,8 @@
 
 - &#9745; Easy to add via activity bar or by just typing
 - &#9745; just select a text and press <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>a</kbd> or <kbd>shift+cmd+a</kbd> to add to todo list.
-- &#9744; shortcut key for auto input field pop up
-
+- &#9745; shortcut key for auto input field pop up (press <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>a</kbd> or <kbd>shift+cmd+a</kbd> without selectiong any text.)
+<!-- &#9744 -->
 
 ![Tutorial](extension_media/op.gif)
 
@@ -45,6 +45,10 @@ minor bug fix.
 ### 1.0.0
 
 Added shortcut key bindings.
+
+### 1.1.0
+
+Added shortcut to input pop up.
 
 <!-- -----------------------------------------------------------------------------------------------------------
 ## Following extension guidelines
