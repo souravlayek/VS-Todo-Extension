@@ -37,6 +37,13 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
           vscode.window.showInformationMessage(data.value);
           break;
         }
+        case "onWarn": {
+          if (!data.value) {
+            return;
+          }
+          vscode.window.showWarningMessage(data.value);
+          break;
+        }
         case "onError": {
           if (!data.value) {
             return;

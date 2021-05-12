@@ -19,3 +19,7 @@ Added shortcut key bindings.
 ### [1.1.0]
 
 Added shortcut to input pop up.
+
+### [1.2.0]
+
+Added Category based task grouping.

@@ -6,6 +6,9 @@
 - &#9745; Easy to add via activity bar or by just typing
 - &#9745; just select a text and press <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>a</kbd> or <kbd>shift+cmd+a</kbd> to add to todo list.
 - &#9745; shortcut key for auto input field pop up (press <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>a</kbd> or <kbd>shift+cmd+a</kbd> without selectiong any text.)
+- &#9745; type task #category format the task will added with a category if no # used then it will automatically added to the general category.
+- &#9744; single task in multiple category.
+- &#9744; importance based sorting.
 <!-- &#9744 -->
 
 ![Tutorial](extension_media/op.gif)
@@ -49,6 +52,9 @@ Added shortcut key bindings.
 ### 1.1.0
 
 Added shortcut to input pop up.
+### 1.2.0
+
+Added Category based task grouping.
 
 <!-- -----------------------------------------------------------------------------------------------------------
 ## Following extension guidelines

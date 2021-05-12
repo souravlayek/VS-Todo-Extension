@@ -34,7 +34,7 @@ export function activate(context: vscode.ExtensionContext) {
 						prompt: "Enter Task: ",
 						placeHolder:"Type your task"
 					}
-					vscode.window.showInputBox(options).then(res => {
+					vscode.window.showInputBox(options).then((res :any) => {
 						if (!res) return;
 						sidebarProvider._view?.webview.postMessage({type: "new-todo", value: res});
 					})
