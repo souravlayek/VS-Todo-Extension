@@ -33,11 +33,11 @@ export function activate(context: vscode.ExtensionContext) {
 					let options: vscode.InputBoxOptions = {
 						prompt: "Enter Task: ",
 						placeHolder:"Type your task"
-					}
+					};
 					vscode.window.showInputBox(options).then((res :any) => {
-						if (!res) return;
+						if (!res) {return;};
 						sidebarProvider._view?.webview.postMessage({type: "new-todo", value: res});
-					})
+					});
 					// vscode.window.showWarningMessage("no text selected");
 					return;
 				}

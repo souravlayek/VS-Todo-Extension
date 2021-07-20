@@ -1,92 +1,132 @@
 <script lang="ts">
-    import {  onMount } from "svelte/internal";
-    import { v4 as uuidv4 } from 'uuid';
-    import TodoList from "./TodoList.svelte"
-    import TodoInput from "./TodoInput.svelte"
+  import { onMount } from "svelte/internal";
+  import { v4 as uuidv4 } from "uuid";
+  import TodoItem from "./TodoItem.svelte";
+  import Topbar from "./Topbar.svelte";
 
-
-        const groupBy = (key: any) =>(array: Array<any>) =>
-            array.reduce((objectsByKeyValue, obj) => {
-                const value = obj[key];
-                objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(obj);
-                return objectsByKeyValue;
-            }, {});
-        let groupByCat = groupBy("category") 
-        let todos: Array<{id: string ,task:string, completed:boolean, category: string}> = tsvscode.getState()?.todos || [];
-        let grpupedTodos:any = groupByCat(todos)
-        let todoListArray:Array<string>;
-        console.log(grpupedTodos)
-        
-        $: {
-            tsvscode.setState({ todos })
+  const loadCategories = (todoList: Array<TodoItemType>) => {
+    const tempCategoryList: Array<string> = [];
+    todoList.forEach((item) => {
+      item.category.forEach((cat) => {
+        if (tempCategoryList.indexOf(cat) === -1) {
+          tempCategoryList.push(cat);
         }
-        $: {
-            grpupedTodos = groupByCat(todos)
-            console.log(grpupedTodos)
-            todoListArray = Object.keys(grpupedTodos)
-        }
-    
-        onMount(() => {
-            window.addEventListener("message", (event) => {
-                const message = event.data;
-                switch (message.type) {
-                    case "new-todo":
-                        let todoData =  message.value.split("#")
-                        console.log(todoData)
-                        let todoText = message.value
-                        todos =  [{id: uuidv4(),task: message.value, completed:false, category: "" },...todos]
-                        console.log(todos)
-                        break;
-                    case "load-todo":
-                        if (message){
-                            todos =  [...JSON.parse(message.value),...todos]
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            })
-        })
-    
-        const deleteItem = (id: string):void => {
-            const data = todos.filter(item => item.id !== id)
-            todos = data
-        }
+      });
+    });
+    return tempCategoryList;
+  };
 
-        const updateTodos = (text: string) => {
-            const todoData =  text.split("#")
-            const todoText = todoData[0]
-            todoData.shift()
-            const tempCategory = todoData.join(" ")
-            let category= "general"
-            if(tempCategory.trim().length !== 0) {
-                category = tempCategory
-            }
-            if(todoText.trim().length === 0){
-                tsvscode.postMessage({type: "onError", value: "No task added"})
-                return;
-            }
-            todos = [{id: uuidv4(),task: todoText, completed: false, category: category}, ...todos];
-            // const grouped = groupBy(todos, (c:any) => c.category)
-            // console.log(grouped)
+  let todos: Array<TodoItemType> = tsvscode.getState()?.todos || [];
+  let renderableTodos: Array<TodoItemType> = todos;
+  let categories: Array<string> = loadCategories(todos) || [];
 
-        }
-    </script>
-    
-    
-    
-    <style>
+  $: {
+    tsvscode.setState({ todos });
+  }
+  $: {
+    renderableTodos = todos;
+  }
 
-    </style>
-    
-    <div class="main">
-        <TodoInput updateTodos={(data)=> updateTodos(data)} />
+  onMount(() => {
+    window.addEventListener("message", (event) => {
+      const message = event.data;
+      switch (message.type) {
+        case "new-todo":
+          updateTodos(message.value);
+          break;
+        case "load-todo":
+          if (message) {
+            todos = [...JSON.parse(message.value), ...todos];
+          }
+          break;
+        default:
+          break;
+      }
+    });
+  });
 
-        <div class="todolist">
-            {#each todoListArray as todoListKey}
-                <TodoList heading={todoListKey} todoList={grpupedTodos[todoListKey]} deleteItem={(id) => deleteItem(id)} />
-            {/each}
-        </div>
-        
-    </div>
-    
+
+  const extractCategories = (text: string) => {
+    const wordList: Array<string> = text.split(" ");
+    const categoryList = wordList.filter((item) => item.indexOf("#") !== -1);
+    const noRepetedCategoryList: Array<string> = [];
+
+    categoryList.forEach((item) => {
+      if (noRepetedCategoryList.indexOf(item) === -1) {
+        noRepetedCategoryList.push(item);
+      }
+    });
+    return noRepetedCategoryList;
+  };
+  const extractTask = (text: string) => {
+    const wordList: Array<string> = text.split(" ");
+    const taskWordList = wordList.filter((item) => item.indexOf("#") === -1);
+    const task = taskWordList.join(" ");
+    return task;
+  };
+
+  const createTodo = (text: string): TodoItemType | undefined => {
+    let categoryList = extractCategories(text);
+    let todoText = extractTask(text);
+    if (todoText.trim().length === 0) {
+      tsvscode.postMessage({ type: "onError", value: "No task added" });
+      return;
+    }
+    const updatedCategoryList: Array<string> = [];
+
+    categoryList.forEach((item) => {
+      if (categories.indexOf(item) === -1) {
+        updatedCategoryList.push(item);
+      }
+    });
+    categories = [...categories, ...updatedCategoryList];
+    return {
+      id: uuidv4(),
+      task: todoText,
+      completed: false,
+      category: categoryList,
+      timeStamp: Date.now(),
+    };
+  };
+
+  const deleteItem = (id: string): void => {
+    const data = todos.filter((item) => item.id !== id);
+    todos = data;
+    categories = loadCategories(data);
+  };
+
+  const updateTodos = (text: string) => {
+    const todoItem = createTodo(text);
+    if (!!todoItem) {
+      todos = [todoItem, ...todos];
+    }
+  };
+  const filterBasedOnCategories = (text: string | null) => {
+    if (text === null) {
+      renderableTodos = [...todos];
+    } else {
+      const filteredTodos: Array<TodoItemType> = todos.filter(
+        (item) => item.category.indexOf(text) !== -1
+      );
+      // console.log(filteredTodos)
+      renderableTodos = [...filteredTodos];
+    }
+  };
+</script>
+
+<div class="main">
+  <Topbar
+    {updateTodos}
+    categoryList={categories}
+    {filterBasedOnCategories}
+  />
+
+  <div class="todolist">
+    {#each renderableTodos as todoListKey}
+      <TodoItem todo={todoListKey} deleteItem={(id) => deleteItem(id)} />
+    {/each}
+  </div>
+</div>
+
+<style>
+</style>
