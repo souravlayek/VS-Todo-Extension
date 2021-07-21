@@ -35,7 +35,7 @@
   {#if filterOpened}
     <div class="topBarBody">
       <div class="catagories">
-        <p class="heading">Categories:</p>
+        <p class="heading">Filters:</p>
         <p class="hint">? Click to filter</p>
         <div class="categoryItemList">
           <div
