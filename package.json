@@ -66,6 +66,11 @@
     ],
     "keybindings": [
       {
+        "command": "workbench.view.extension.vstodo-sidebar-view",
+        "key": "ctrl+k ctrl+v",
+        "mac": "cmd+k cmd+v"
+      },
+      {
         "command": "vstodo.addTodo",
         "key": "ctrl+alt+a",
         "mac": "shift+cmd+a"

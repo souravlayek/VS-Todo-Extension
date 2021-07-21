@@ -1,5 +1,5 @@
 <script lang="ts">
-    export let updateTodos:(text:string) => void
+    export let updateTodo:(text:string) => void
     let text:string = ""
 </script>
 
@@ -10,11 +10,11 @@
 <!-- svelte-ignore missing-declaration -->
 <form on:submit|preventDefault={() => {
     if(text.trim().length !==0) {
-        updateTodos(text)
+        updateTodo(text)
     }else {
         tsvscode.postMessage({type: "onWarn", value: "Please type something"})
     }
     text=""
 }}>
-    <input type="text" bind:value={text} placeholder="Enter Task" >
+    <input type="text" bind:value={text} placeholder="e.g. Your Task #tag1 #tag2" >
 </form>

@@ -1,16 +1,16 @@
 <script lang="ts">
   import TodoInput from "./TodoInput.svelte";
-  export let updateTodos: (text: string) => void;
+  export let updateTodo: (text: string) => void;
   export let filterBasedOnCategories: (text: string | null) => void;
   export let categoryList: Array<string>;
   let filterOpened: Boolean = false;
 
 </script>
 
-<div class="topbarWrapper">
+<div class="topBarWrapper">
   <div class="topBar">
     <div class="inputBox">
-      <TodoInput updateTodos={(data) => updateTodos(data)} />
+      <TodoInput updateTodo={(data) => updateTodo(data)} />
     </div>
     <div
       on:click={() => {
@@ -40,14 +40,26 @@
         <div class="categoryItemList">
           <div
             on:click={() => filterBasedOnCategories(null)}
-            class="categoryitem"
+            class="categoryItem"
           >
             All
+          </div>
+          <div
+            on:click={() => filterBasedOnCategories("complete")}
+            class="categoryItem"
+          >
+            Completed
+          </div>
+          <div
+            on:click={() => filterBasedOnCategories("incomplete")}
+            class="categoryItem"
+          >
+            Not Completed
           </div>
           {#each categoryList as category}
             <div
               on:click={() => filterBasedOnCategories(category)}
-              class="categoryitem"
+              class="categoryItem"
             >
               {category.slice(1)}
             </div>
@@ -59,7 +71,7 @@
 </div>
 
 <style>
-  .topbarWrapper {
+  .topBarWrapper {
     margin: 20px 0;
   }
   .topBar {
@@ -83,7 +95,7 @@
     gap: 5px;
     flex-wrap: wrap;
   }
-  .categoryitem {
+  .categoryItem {
     cursor: pointer;
     padding: 5px;
     width: fit-content;

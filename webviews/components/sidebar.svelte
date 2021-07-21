@@ -1,8 +1,9 @@
 <script lang="ts">
   import { onMount } from "svelte/internal";
   import { v4 as uuidv4 } from "uuid";
+  import EmptyTab from "./Emptytab.svelte";
   import TodoItem from "./TodoItem.svelte";
-  import Topbar from "./Topbar.svelte";
+  import TopBar from "./Topbar.svelte";
 
   const loadCategories = (todoList: Array<TodoItemType>) => {
     const tempCategoryList: Array<string> = [];
@@ -16,15 +17,24 @@
     return tempCategoryList;
   };
 
-  let todos: Array<TodoItemType> = tsvscode.getState()?.todos || [];
-  let renderableTodos: Array<TodoItemType> = todos;
-  let categories: Array<string> = loadCategories(todos) || [];
+  let todoList: Array<TodoItemType> = tsvscode.getState()?.todoList || [];
+  let todoListToRender: Array<TodoItemType> = [...todoList];
+  let categories: Array<string> = loadCategories(todoList) || [];
+  let isAlwaysDelete: boolean = tsvscode.getState()?.isAlwaysDelete || false;
 
   $: {
-    tsvscode.setState({ todos });
+    tsvscode.setState({ todoList, isAlwaysDelete });
+
+    tsvscode.postMessage({
+      type: "onTodoAdd",
+      value: {
+        incomplete: todoList.filter((item) => !item.completed).length,
+        complete: todoList.filter((item) => item.completed).length,
+      },
+    });
   }
   $: {
-    renderableTodos = todos;
+    todoListToRender = todoList;
   }
 
   onMount(() => {
@@ -32,11 +42,20 @@
       const message = event.data;
       switch (message.type) {
         case "new-todo":
-          updateTodos(message.value);
+          addNewTodo(message.value);
           break;
         case "load-todo":
           if (message) {
-            todos = [...JSON.parse(message.value), ...todos];
+            todoList = [...JSON.parse(message.value), ...todoList];
+          }
+          break;
+        case "delete-todo":
+          if (message) {
+            const { id, isAlways } = JSON.parse(message.value);
+            deleteItem(id);
+            if (isAlways) {
+              isAlwaysDelete = isAlways;
+            }
           }
           break;
         default:
@@ -45,18 +64,17 @@
     });
   });
 
-
   const extractCategories = (text: string) => {
     const wordList: Array<string> = text.split(" ");
     const categoryList = wordList.filter((item) => item.indexOf("#") !== -1);
-    const noRepetedCategoryList: Array<string> = [];
+    const noRepetendCategoryList: Array<string> = [];
 
     categoryList.forEach((item) => {
-      if (noRepetedCategoryList.indexOf(item) === -1) {
-        noRepetedCategoryList.push(item);
+      if (noRepetendCategoryList.indexOf(item) === -1) {
+        noRepetendCategoryList.push(item.toLowerCase());
       }
     });
-    return noRepetedCategoryList;
+    return noRepetendCategoryList;
   };
   const extractTask = (text: string) => {
     const wordList: Array<string> = text.split(" ");
@@ -75,8 +93,8 @@
     const updatedCategoryList: Array<string> = [];
 
     categoryList.forEach((item) => {
-      if (categories.indexOf(item) === -1) {
-        updatedCategoryList.push(item);
+      if (categories.indexOf(item.toLowerCase()) === -1) {
+        updatedCategoryList.push(item.toLowerCase());
       }
     });
     categories = [...categories, ...updatedCategoryList];
@@ -90,41 +108,76 @@
   };
 
   const deleteItem = (id: string): void => {
-    const data = todos.filter((item) => item.id !== id);
-    todos = data;
+    const data = todoList.filter((item) => item.id !== id);
+    todoList = data;
     categories = loadCategories(data);
   };
 
-  const updateTodos = (text: string) => {
+  const requestDeleteItem = (id: string) => {
+    if(!isAlwaysDelete) {
+      tsvscode.postMessage({
+        type: "onDeleteRequest",
+        value: id,
+      });
+    }else {
+      deleteItem(id);
+    }
+  };
+
+  const addNewTodo = (text: string) => {
     const todoItem = createTodo(text);
     if (!!todoItem) {
-      todos = [todoItem, ...todos];
+      todoList = [todoItem, ...todoList];
     }
   };
   const filterBasedOnCategories = (text: string | null) => {
+    let filteredTodoList: Array<TodoItemType> = [];
     if (text === null) {
-      renderableTodos = [...todos];
+      todoListToRender = [...todoList];
     } else {
-      const filteredTodos: Array<TodoItemType> = todos.filter(
-        (item) => item.category.indexOf(text) !== -1
-      );
-      // console.log(filteredTodos)
-      renderableTodos = [...filteredTodos];
+      if (text === "complete") {
+        filteredTodoList = todoList.filter((item) => item.completed);
+      } else if (text === "incomplete") {
+        filteredTodoList = todoList.filter((item) => !item.completed);
+      } else {
+        filteredTodoList = todoList.filter(
+          (item) => item.category.indexOf(text.toLowerCase()) !== -1
+        );
+      }
+      todoListToRender = [...filteredTodoList];
     }
+  };
+
+  const toggleComplete = (id: string) => {
+    const updatedTodoList = todoList.map((item) => {
+      if (item.id === id) {
+        return { ...item, completed: !item.completed };
+      }
+      return item;
+    });
+    todoList = updatedTodoList;
   };
 </script>
 
 <div class="main">
-  <Topbar
-    {updateTodos}
+  <TopBar
+    updateTodo={addNewTodo}
     categoryList={categories}
     {filterBasedOnCategories}
   />
 
-  <div class="todolist">
-    {#each renderableTodos as todoListKey}
-      <TodoItem todo={todoListKey} deleteItem={(id) => deleteItem(id)} />
-    {/each}
+  <div class="todoList">
+    {#if todoListToRender.length === 0}
+      <EmptyTab />
+    {:else}
+      {#each todoListToRender as todoListKey}
+        <TodoItem
+          todo={todoListKey}
+          deleteItem={(id) => requestDeleteItem(id)}
+          {toggleComplete}
+        />
+      {/each}
+    {/if}
   </div>
 </div>
 
