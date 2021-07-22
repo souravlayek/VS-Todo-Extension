@@ -3,7 +3,7 @@
 ![image](https://img.shields.io/badge/Svelte-4A4A55?style=for-the-badge&logo=svelte&logoColor=FF3E00)
 ![image](https://img.shields.io/badge/Visual_Studio_Code-0078D4?style=for-the-badge&logo=visual%20studio%20code&logoColor=white)
 
-## Now don't have to worry about your issue with remembering just add and check. :blush
+## Now don't have to worry about your issue with remembering just add and check.
 
 
 ### With V2 Now become more productive more organized with the brand new filter options and many more feature. 
