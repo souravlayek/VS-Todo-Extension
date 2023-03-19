@@ -31,9 +31,7 @@
     "Other"
   ],
   "activationEvents": [
-    "onStartupFinished",
-    "onCommand:vstodo.addTodo",
-    "onView:vstodo-sidebar"
+    "onStartupFinished"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -76,18 +74,12 @@
         "mac": "shift+cmd+a"
       }
     ],
-    "configuration": {
-      "title": "VSTodo",
-      "properties": {
-        "vstodo.integration": {
-          "type": "string",
-          "default": "",
-          "description": "Choose usage type local/todoist"
-        },
-        "vstodo.todoistConfigOptions": {
-          "type": "object",
-          "description": "Here you can pass your todoist Configurations like token, project id etc"
-        }
+    "properties": {
+      "secrets": {
+        "type": "object",
+        "description": "A storage for secret values",
+        "default": {},
+        "scope": "machine"
       }
     }
   },

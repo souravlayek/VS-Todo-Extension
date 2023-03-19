@@ -1,7 +1,7 @@
 <script lang="ts">
-    import Home from "./home.svelte";
     import ChooseUsageType from "./pages/ChooseUsageType.svelte";
     import LocalHome from "./pages/LocalHome.svelte";
+    import TodoistHome from "./pages/TodoistHome.svelte";
 
 
     export let path: string = ""
@@ -12,5 +12,7 @@
         <LocalHome />
     {:else if path.includes("signin")}
         <ChooseUsageType />
+    {:else if path.includes("todoist-home")}
+        <TodoistHome />
     {/if}
 </main>

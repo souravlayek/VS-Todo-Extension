@@ -46,3 +46,6 @@ export const updateStatusBarItem = (value: {
     statusBarItem.text = `Task: ${value.incomplete} $(circle-large-outline) ${value.complete} $(pass-filled)`;
     statusBarItem.show();
 };
+
+export * from "./workspaceConfigHelper";
+export * from "./storageHelper";
