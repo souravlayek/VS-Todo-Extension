@@ -77,18 +77,18 @@
       }
     ],
     "configuration": {
-        "title": "VSTodo",
-        "properties": {
-            "vstodo.integration": {
-                "type": "string",
-                "default": "",
-                "description": "Choose usage type local/todoist"
-            },
-            "vstodo.todoistConfigOptions": {
-                "type": "object",
-                "description": "Here you can pass your todoist Configurations like token, project id etc"
-            }
+      "title": "VSTodo",
+      "properties": {
+        "vstodo.integration": {
+          "type": "string",
+          "default": "",
+          "description": "Choose usage type local/todoist"
+        },
+        "vstodo.todoistConfigOptions": {
+          "type": "object",
+          "description": "Here you can pass your todoist Configurations like token, project id etc"
         }
+      }
     }
   },
   "scripts": {
@@ -126,6 +126,7 @@
   },
   "dependencies": {
     "date-fns": "^2.22.1",
+    "dotenv": "^16.0.3",
     "uuid": "^8.3.2"
   }
 }
