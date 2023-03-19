@@ -75,7 +75,21 @@
         "key": "ctrl+alt+a",
         "mac": "shift+cmd+a"
       }
-    ]
+    ],
+    "configuration": {
+        "title": "VSTodo",
+        "properties": {
+            "vstodo.integration": {
+                "type": "string",
+                "default": "",
+                "description": "Choose usage type local/todoist"
+            },
+            "vstodo.todoistConfigOptions": {
+                "type": "object",
+                "description": "Here you can pass your todoist Configurations like token, project id etc"
+            }
+        }
+    }
   },
   "scripts": {
     "vscode:prepublish": "yarn run compile",

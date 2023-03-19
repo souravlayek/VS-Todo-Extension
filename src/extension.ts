@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import { SidebarProvider } from "./SidebarProvider";
 
+
 export function activate(context: vscode.ExtensionContext) {
   const statusBarItem = vscode.window.createStatusBarItem(
     vscode.StatusBarAlignment.Right
@@ -20,12 +21,6 @@ export function activate(context: vscode.ExtensionContext) {
       );
     }
   };
-
-  context.subscriptions.push(
-    vscode.commands.registerCommand("vs-todo.helloWorld", () => {
-      vscode.window.showInformationMessage("Hello World from Vs Todo!");
-    })
-  );
 
   statusBarItem.text = "$(diff-added) Add Todo";
   statusBarItem.command = "vstodo.addTodo";

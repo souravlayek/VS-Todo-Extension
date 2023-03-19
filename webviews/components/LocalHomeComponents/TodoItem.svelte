@@ -126,6 +126,7 @@
     border-radius: 2px;
     -moz-user-select: none;
     -webkit-user-select: none;
+    user-select: none;
   }
   .date {
     border-radius: 3px;
@@ -148,7 +149,7 @@
     border-radius: 50%;
     vertical-align: middle;
     border: 1px solid #ddd;
-    -webkit-appearance: none;
+    /* -webkit-appearance: none; */
     outline: none;
     cursor: pointer;
   }
