@@ -43,11 +43,6 @@ export default fs
           dedupe: ["svelte"],
         }),
         commonjs(),
-        typescript({
-          tsconfig: "webviews/tsconfig.json",
-          sourceMap: !production,
-          inlineSources: !production,
-        }),
 
         // In dev mode, call `npm run start` once
         // the bundle has been generated
@@ -60,6 +55,11 @@ export default fs
         // If we're building for production (npm run build
         // instead of npm run dev), minify
         production && terser(),
+        typescript({
+          tsconfig: "webviews/tsconfig.json",
+          sourceMap: !production,
+          inlineSources: !production,
+        }),
       ],
       watch: {
         clearScreen: false,
